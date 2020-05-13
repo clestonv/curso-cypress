@@ -12,6 +12,10 @@ describe('Cypress Basics', () => {
         cy.title()
             .should('be.equal','Campo de Treinamento')
             .and('contain','Campo de Treinamento').debug()
+
+        cy.title().should(title => {
+            console.log(title)
+        })
     })
 
     it('Should find and interact with an element ..', () => {
