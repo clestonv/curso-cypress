@@ -6,7 +6,7 @@ describe('Work with alerts', () => {
     beforeEach(() => {
         cy.reload()
     })
-    
+
     it('Alert',() => {
         cy.get('#alert').click()
         cy.on('window:alert', msg => {
@@ -63,5 +63,21 @@ describe('Work with alerts', () => {
             expect(msg).to.be.equal(':D')
         }) 
         cy.get('#prompt').click()        
+    })
+
+    it.only('Validando Mensagem',() => {
+        const stub = cy.stub().as('Alertas')
+        cy.on('window:alert', stub)
+        cy.get('#formCadastrar').click()
+            .then(() => expect(stub.getCall(0)).to.be.calledWith('Nome eh obrigatorio'))        
+        cy.get('#formNome').type('Cleberson')
+
+        cy.get('#formCadastrar').click()
+            .then(() => expect(stub.getCall(1)).to.be.calledWith('Sobrenome eh obrigatorio'))
+        cy.get('[data-cy=dataSobrenome]').type('Osorio')
+
+        cy.get('#formSexoMasc').click()
+        cy.get('#formCadastrar').click()
+        cy.get('#resultado > :nth-child(1)').should('have.text','Cadastrado!')
     })
 })
