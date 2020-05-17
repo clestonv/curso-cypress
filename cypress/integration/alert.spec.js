@@ -23,4 +23,29 @@ describe('Work with alerts', () => {
         })
         
     })
+
+    it.only('Confirm ..',() => {
+        cy.on('window:confirm', msg => {
+            console.log(msg)
+            expect(msg).to.be.equal('Confirm Simples')
+        }) 
+        cy.on('window:alert', msg => {
+            console.log(msg)
+            expect(msg).to.be.equal('Confirmado')
+        }) 
+        cy.get('#confirm').click()        
+    })
+
+    it.only('Deny ..',() => {
+        cy.on('window:confirm', msg => {
+            console.log(msg)
+            expect(msg).to.be.equal('Confirm Simples')
+            return false      //False para cancelar o Confirm
+        }) 
+        cy.on('window:alert', msg => {
+            console.log(msg)
+            expect(msg).to.be.equal('Negado')
+        }) 
+        cy.get('#confirm').click()        
+    })
 })
