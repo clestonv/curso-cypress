@@ -6,7 +6,7 @@ describe('Work with alerts', () => {
     beforeEach(() => {
         cy.reload()
     })
-
+    
     it('Alert',() => {
         cy.get('#alert').click()
         cy.on('window:alert', msg => {
@@ -47,5 +47,21 @@ describe('Work with alerts', () => {
             expect(msg).to.be.equal('Negado')
         }) 
         cy.get('#confirm').click()        
+    })
+
+    // Prompt
+    it.only('Prompt ..',() => {
+        cy.window().then(win => {
+            cy.stub(win, 'prompt').returns('45')
+        })
+        cy.on('window:confirm', msg => {
+            console.log(msg)
+            expect(msg).to.be.equal('Era 45?')
+        }) 
+        cy.on('window:alert', msg => {
+            console.log(msg)
+            expect(msg).to.be.equal(':D')
+        }) 
+        cy.get('#prompt').click()        
     })
 })
