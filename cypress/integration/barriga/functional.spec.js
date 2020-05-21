@@ -16,4 +16,16 @@ describe('Work with alerts', () => {
         cy.get('.btn').click()
         cy.get('.toast-message').should('contain','Conta inserida com sucesso!')
     })
+
+    it('Should update an account', () => {
+        // cy.get(':nth-child(1) > :nth-child(2) > .fa-edit')
+        cy.get('[data-test=menu-settings] > .fas').click()
+        cy.get('[href="/contas"]').click()
+        cy.xpath("//table//td[contains(., 'Conta Teste')]/..//i[@class='far fa-edit']").click()
+        cy.get('[data-test=nome]')
+            .clear()
+            .type('Conta alterada')
+        cy.get('.btn').click()
+        cy.get('.toast-message').should('contain','Conta atualizada com sucesso!')
+    })
 })
