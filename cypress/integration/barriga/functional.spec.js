@@ -4,11 +4,13 @@ import loc from '../../support/locators'
 
 describe('Work with alerts', () => {
     before(() => {
-        cy.visit('https://barrigareact.wcaquino.me') // Hooks
-        cy.get(loc.login.user).type('cleberson.osorioti@hotmail.com')
-        cy.get(loc.login.password).type('T@bl3tenis')
-        cy.get(loc.login.btn_login).click()
-        cy.get(loc.message).should('contain','Bem vindo')
+        cy.login('cleberson.osorioti@hotmail.com','T@bl3tenis')
+        cy.resetApp()
+        // cy.visit('https://barrigareact.wcaquino.me') // Hooks
+        // cy.get(loc.login.user).type('cleberson.osorioti@hotmail.com')
+        // cy.get(loc.login.password).type('T@bl3tenis')
+        // cy.get(loc.login.btn_login).click()
+        // cy.get(loc.message).should('contain','Bem vindo')
     })
 
     it('Should create an account', ()=> {

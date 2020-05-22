@@ -7,6 +7,7 @@ const locators = {
     menu: {
         settings:'[data-test=menu-settings] > .fas',
         contas:'[href="/contas"]',
+        reset: '[href="/reset"]'
     },
     conta: {
         nome: '[data-test=nome]',
