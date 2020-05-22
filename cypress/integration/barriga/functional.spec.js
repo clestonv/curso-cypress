@@ -39,4 +39,17 @@ describe('Work with alerts', () => {
         cy.get(loc.conta.btn_salvar).click()
         cy.get(loc.message).should('contain','code 400')
     })
+
+    it('Should create a transaction', () => {
+        cy.get(loc.menu.movimentacao).click()
+
+        cy.get(loc.movimentacao.descricao).type('New')
+        cy.get(loc.movimentacao.valor).type('250')
+        cy.get(loc.movimentacao.interessado).type('Interessante')
+        cy.get(loc.movimentacao.btn_salvar).click()
+        cy.get(loc.message).should('contain','sucesso')
+
+        cy.get(loc.extrato.linhas).should('have.length', 7)
+        cy.xpath(loc.extrato.xp_busca_elemento).should('exist')
+    })
 })
