@@ -12,7 +12,7 @@ const locators = {
     conta: {
         nome: '[data-test=nome]',
         btn_salvar: '.btn',
-        xp_btn_alterar: "//table//td[contains(., 'Conta Teste')]/..//i[@class='far fa-edit']",
+        xp_btn_alterar: "//table//td[contains(., 'Conta de Teste')]/..//i[@class='far fa-edit']",
     },
     message:'.toast-message',
 }
