@@ -6,12 +6,17 @@ import '../../support/commands.conta'
 describe('Work with alerts', () => {
     before(() => {
         cy.login('teste@cleston.com','cleston')
-        cy.resetApp()
+        
         // cy.visit('https://barrigareact.wcaquino.me') // Hooks
         // cy.get(loc.login.user).type('cleberson.osorioti@hotmail.com')
         // cy.get(loc.login.password).type('T@bl3tenis')
         // cy.get(loc.login.btn_login).click()
         // cy.get(loc.message).should('contain','Bem vindo')
+    })
+
+    beforeEach(()=> {
+        cy.get(loc.menu.home).click()
+        cy.resetApp()
     })
 
     it('Should create an account', ()=> {
@@ -24,7 +29,7 @@ describe('Work with alerts', () => {
         // cy.get(':nth-child(1) > :nth-child(2) > .fa-edit')
         cy.acessarMenuConta()
 
-        cy.xpath(loc.conta.fn_xp_btn_alterar('Conta de Teste')).click()
+        cy.xpath(loc.conta.fn_xp_btn_alterar('Conta para alterar')).click()
         cy.get(loc.conta.nome)
             .clear()
             .type('Conta alterada')
@@ -35,7 +40,7 @@ describe('Work with alerts', () => {
     it('Should not create an account with same name', () => {
         cy.acessarMenuConta()
 
-        cy.get(loc.conta.nome).type('Conta alterada')
+        cy.get(loc.conta.nome).type('Conta mesmo nome')
         cy.get(loc.conta.btn_salvar).click()
         cy.get(loc.message).should('contain','code 400')
     })
@@ -44,9 +49,9 @@ describe('Work with alerts', () => {
         cy.get(loc.menu.movimentacao).click()
 
         cy.get(loc.movimentacao.descricao).type('New')
-        cy.get(loc.movimentacao.valor).type('250')
+        cy.get(loc.movimentacao.valor).type('250',{force: true})
         cy.get(loc.movimentacao.interessado).type('Interessante')
-        cy.get(loc.movimentacao.conta).select('Conta alterada')
+        cy.get(loc.movimentacao.conta).select('Conta para movimentacoes')
         cy.get(loc.movimentacao.status).click()
         cy.get(loc.movimentacao.btn_salvar).click()
         cy.get(loc.message).should('contain','sucesso')
@@ -55,16 +60,25 @@ describe('Work with alerts', () => {
         cy.xpath(loc.extrato.fn_xp_busca_elemento('New','250')).should('exist')
     })
 
-    it('Should get balance', () => {
-        console.log(loc.saldo.fn_xp_saldo_conta('Conta de Teste'))
+    it('Should get balance', () => {        
         cy.get(loc.menu.home).click()
-        cy.xpath(loc.saldo.fn_xp_saldo_conta('Conta alterada')).should('contain','250,00')
+        cy.xpath(loc.saldo.fn_xp_saldo_conta('Conta para saldo')).should('contain','534,00')
 
+        cy.get(loc.menu.extrato).click()
+        cy.xpath(loc.extrato.fn_xp_alterar_elemento('Movimentacao 1, calculo saldo')).click()
+        // cy.wait(2000)
+        cy.get(loc.movimentacao.descricao).should('have.value','Movimentacao 1, calculo saldo')
+        cy.get(loc.movimentacao.status).click()
+        cy.get(loc.movimentacao.btn_salvar).click()
+        cy.get(loc.message).should('contain','sucesso')
+
+        cy.get(loc.menu.home).click()
+        cy.xpath(loc.saldo.fn_xp_saldo_conta('Conta para saldo')).should('contain','4.034,00')
     })
 
     it('Should remova a transaction', () => {
         cy.get(loc.menu.extrato).click({force: true})
-        cy.xpath(loc.extrato.fn_xp_remove_elemento('New')).click()
-        cy.get(loc.message).should('contain','sucesso')
+        cy.xpath(loc.extrato.fn_xp_remove_elemento('Movimentacao para exclusao')).click()
+        cy.get(loc.message).should('contain','sucesso')        
     })
-})
+}) 
