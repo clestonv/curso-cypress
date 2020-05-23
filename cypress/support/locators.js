@@ -5,6 +5,7 @@ const locators = {
         btn_login:'.btn',
     },
     menu: {
+        home: '[data-test=menu-home]',
         settings:'[data-test=menu-settings] > .fas',
         contas:'[href="/contas"]',
         reset: '[href="/reset"]',
@@ -13,18 +14,23 @@ const locators = {
     conta: {
         nome: '[data-test=nome]',
         btn_salvar: '.btn',
-        xp_btn_alterar: "//table//td[contains(., 'Conta de Teste')]/..//i[@class='far fa-edit']",
+        fn_xp_btn_alterar: nome => `//table//td[contains(., '${nome}')]/..//i[@class='far fa-edit']`,
     },
     movimentacao: {
         descricao: '[data-test=descricao]',
         valor: '[data-test=valor]',
         interessado: '[data-test=envolvido]',
+        conta: '[data-test=conta]',
+        status: '[data-test=status]',
         btn_salvar: '.btn-primary',
 
     },
     extrato: {
         linhas: '.list-group > li',
-        xp_busca_elemento: "//span[contains(., 'New')]/following-sibling::small[contains(.,'250')]",
+        fn_xp_busca_elemento: (desc, value) => `//span[contains(., '${desc}')]/following-sibling::small[contains(.,'${value}')]`,
+    },
+    saldo: {
+        fn_xp_saldo_conta: nome => `//td[contains(., '${nome}')]/../td[2]`,
     },
     message:'.toast-message',
 }

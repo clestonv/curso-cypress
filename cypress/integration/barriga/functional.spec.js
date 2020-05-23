@@ -24,7 +24,7 @@ describe('Work with alerts', () => {
         // cy.get(':nth-child(1) > :nth-child(2) > .fa-edit')
         cy.acessarMenuConta()
 
-        cy.xpath(loc.conta.xp_btn_alterar).click()
+        cy.xpath(loc.conta.fn_xp_btn_alterar('Conta de Teste')).click()
         cy.get(loc.conta.nome)
             .clear()
             .type('Conta alterada')
@@ -46,10 +46,19 @@ describe('Work with alerts', () => {
         cy.get(loc.movimentacao.descricao).type('New')
         cy.get(loc.movimentacao.valor).type('250')
         cy.get(loc.movimentacao.interessado).type('Interessante')
+        cy.get(loc.movimentacao.conta).select('Conta alterada')
+        cy.get(loc.movimentacao.status).click()
         cy.get(loc.movimentacao.btn_salvar).click()
         cy.get(loc.message).should('contain','sucesso')
 
         cy.get(loc.extrato.linhas).should('have.length', 7)
-        cy.xpath(loc.extrato.xp_busca_elemento).should('exist')
+        cy.xpath(loc.extrato.fn_xp_busca_elemento('New','250')).should('exist')
+    })
+
+    it('Should get balance', () => {
+        console.log(loc.saldo.fn_xp_saldo_conta('Conta de Teste'))
+        cy.get(loc.menu.home).click()
+        cy.xpath(loc.saldo.fn_xp_saldo_conta('Conta alterada')).should('contain','250,00')
+
     })
 })
