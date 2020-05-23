@@ -10,6 +10,7 @@ const locators = {
         contas:'[href="/contas"]',
         reset: '[href="/reset"]',
         movimentacao:'[data-test=menu-movimentacao]',
+        extrato: '[data-test=menu-extrato]',
     },
     conta: {
         nome: '[data-test=nome]',
@@ -28,6 +29,7 @@ const locators = {
     extrato: {
         linhas: '.list-group > li',
         fn_xp_busca_elemento: (desc, value) => `//span[contains(., '${desc}')]/following-sibling::small[contains(.,'${value}')]`,
+        fn_xp_remove_elemento: conta => `//span[contains(., '${conta}')]/../../..//i[@class='far fa-trash-alt']`,
     },
     saldo: {
         fn_xp_saldo_conta: nome => `//td[contains(., '${nome}')]/../td[2]`,

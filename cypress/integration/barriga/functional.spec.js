@@ -5,7 +5,7 @@ import '../../support/commands.conta'
 
 describe('Work with alerts', () => {
     before(() => {
-        cy.login('cleberson.osorioti@hotmail.com','T@bl3tenis')
+        cy.login('teste@cleston.com','cleston')
         cy.resetApp()
         // cy.visit('https://barrigareact.wcaquino.me') // Hooks
         // cy.get(loc.login.user).type('cleberson.osorioti@hotmail.com')
@@ -60,5 +60,11 @@ describe('Work with alerts', () => {
         cy.get(loc.menu.home).click()
         cy.xpath(loc.saldo.fn_xp_saldo_conta('Conta alterada')).should('contain','250,00')
 
+    })
+
+    it('Should remova a transaction', () => {
+        cy.get(loc.menu.extrato).click({force: true})
+        cy.xpath(loc.extrato.fn_xp_remove_elemento('New')).click()
+        cy.get(loc.message).should('contain','sucesso')
     })
 })
