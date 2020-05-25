@@ -19,12 +19,12 @@ https://barrigarest.wcaquino.me/contas
                 senha: "T@bl3tenis",
            },
        }).its('body.token').should('not.be.empty')
-       .then(token => {
+       .then(token => { // Capturando o token
             cy.request({
                 url: 'https://barrigarest.wcaquino.me/contas',
                 method: 'POST',
                 headers:{
-                    Authorization: `JWT ${token}`
+                    Authorization: `JWT ${token}` // Inserindo o token
                 },
                 body: {
                     nome: 'Conta via Rest',
