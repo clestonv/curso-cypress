@@ -60,3 +60,15 @@ Cypress.Commands.add('getToken',(user, passwd) => {
         return token
     })
 })
+
+Cypress.Commands.add('resetRest', () => {
+    cy.getToken('cleberson.osorioti@hotmail.com','T@bl3tenis').then(token => {
+        cy.request({
+            method: 'GET',
+            url: 'https://barrigarest.wcaquino.me/reset',
+            headers: {
+                Authorization:`JWT ${token}`,
+            }
+        }).its('status').should('be.equal', 200)
+    })    
+})

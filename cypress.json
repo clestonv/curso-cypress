@@ -1,4 +1,5 @@
 {
     "viewportHeight": 600,
-    "viewportWidth": 1100
+    "viewportWidth": 1100,
+    "baseUrl": "https://barrigarest.wcaquino.me/"
 }
