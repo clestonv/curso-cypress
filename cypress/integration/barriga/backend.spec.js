@@ -35,8 +35,30 @@ describe('Work with alerts', () => {
         })
     })
 
-    it('Should update an account', () => {
-       
+    it.only('Should update an account', () => {
+        cy.request({
+            method: 'GET',
+            url: '/contas',
+            headers:{
+                Authorization: `JWT ${token}` // Inserindo o token
+            },
+            qs: {
+                nome: 'Conta para alterar'
+            },
+        }).then(res => {
+            cy.request({
+                url: `https://barrigarest.wcaquino.me/contas/${res.body[0].id}`,
+                method: 'PUT',
+                headers:{
+                     Authorization: `JWT ${token}` // Inserindo o token
+                 },
+                 body: {
+                     nome: 'Conta Aleterada via Rest',
+                 }            
+            }).as('response')
+        })       
+
+       cy.get('@response').its('status').should('be.equal', 200)
     })
 
     it('Should get balance', () => {        
