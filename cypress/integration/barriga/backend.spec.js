@@ -3,13 +3,13 @@
 import '../../support/commands'
 
 describe('Work with alerts', () => {
-    let token
+    // let token
 
     before(() => {
         cy.getToken('cleberson.osorioti@hotmail.com','T@bl3tenis')
-            .then(tkn => {
-                token = tkn
-            })
+            // .then(tkn => {
+            //     token = tkn
+            // })
     })
 
     beforeEach(()=> {
@@ -20,9 +20,9 @@ describe('Work with alerts', () => {
         cy.request({
             url: '/contas',
             method: 'POST',
-            headers:{
-                Authorization: `JWT ${token}` // Inserindo o token
-            },
+            // headers:{
+            //     Authorization: `JWT ${token}` // Inserindo o token
+            // },
             body: {
                 nome: 'Conta via Rest',
             }
@@ -41,9 +41,9 @@ describe('Work with alerts', () => {
             cy.request({
                 url: `/contas/${contaId}`,
                 method: 'PUT',
-                headers:{
-                        Authorization: `JWT ${token}` // Inserindo o token
-                    },
+                // headers:{
+                //         Authorization: `JWT ${token}` // Inserindo o token
+                //     },
                     body: {
                         nome: 'Conta Aleterada via Rest',
                     }            
@@ -56,9 +56,9 @@ describe('Work with alerts', () => {
         cy.request({
             url: '/contas',
             method: 'POST',
-            headers:{
-                Authorization: `JWT ${token}` // Inserindo o token
-            },
+            // headers:{
+            //     Authorization: `JWT ${token}` // Inserindo o token
+            // },
             body: {
                 nome: 'Conta mesmo nome',
             },
@@ -78,9 +78,9 @@ describe('Work with alerts', () => {
             cy.request({
                 method: 'POST',
                 url: '/transacoes',
-                headers:{
-                    Authorization: `JWT ${token}` // Inserindo o token
-                },
+                // headers:{
+                //     Authorization: `JWT ${token}` // Inserindo o token
+                // },
                 body: {
                     conta_id: contaId,
                     data_pagamento: Cypress.moment().add({days: 1}).format('DD/MM/YYYY'),
@@ -101,9 +101,9 @@ describe('Work with alerts', () => {
        cy.request({
            url: '/saldo',
            method: 'GET',
-           headers:{
-            Authorization: `JWT ${token}` // Inserindo o token
-        },
+        //    headers:{
+        //     Authorization: `JWT ${token}` // Inserindo o token
+        // },
        }).then(res => {
            let saldoConta = null
            res.body.forEach(c => {
@@ -115,9 +115,9 @@ describe('Work with alerts', () => {
        cy.request({
            method: 'GET',
            url: '/transacoes',
-           headers:{
-            Authorization: `JWT ${token}` // Inserindo o token
-           },
+        //    headers:{
+        //     Authorization: `JWT ${token}` // Inserindo o token
+        //    },
            qs: {
                descricao: 'Movimentacao 1, calculo saldo'
            }
@@ -125,9 +125,9 @@ describe('Work with alerts', () => {
             cy.request({
                 url: `/transacoes/${res.body[0].id}`,
                 method: 'PUT',
-                headers:{
-                Authorization: `JWT ${token}` // Inserindo o token
-                },
+                // headers:{
+                // Authorization: `JWT ${token}` // Inserindo o token
+                // },
                 body: {
                     status: true,
                     data_transacao: Cypress.moment(res.body[0].data_transacao).format('DD/MM/YYYY'),
@@ -143,9 +143,9 @@ describe('Work with alerts', () => {
        cy.request({
             url: '/saldo',
             method: 'GET',
-            headers:{
-            Authorization: `JWT ${token}` // Inserindo o token
-            },
+            // headers:{
+            // Authorization: `JWT ${token}` // Inserindo o token
+            // },
         }).then(res => {
             let saldoConta = null
             res.body.forEach(c => {
@@ -155,13 +155,13 @@ describe('Work with alerts', () => {
         })
     })
 
-    it.only('Should remova a transaction', () => {
+    it('Should remova a transaction', () => {
         cy.request({
             method: 'GET',
             url: '/transacoes',            
-            headers:{
-             Authorization: `JWT ${token}` // Inserindo o token
-         },
+        //     headers:{
+        //      Authorization: `JWT ${token}` // Inserindo o token
+        //  },
          qs: {
             descricao: 'Movimentacao para exclusao'
         }
@@ -169,9 +169,9 @@ describe('Work with alerts', () => {
             cy.request({
                 url: `/transacoes/${res.body[0].id}`,
                 method: 'DELETE',
-                headers:{
-                    Authorization: `JWT ${token}` // Inserindo o token
-                },
+                // headers:{
+                //     Authorization: `JWT ${token}` // Inserindo o token
+                // },
             }).its('status').should('be.equal', 204)
         })
     })
