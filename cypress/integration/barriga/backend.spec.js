@@ -97,7 +97,7 @@ describe('Work with alerts', () => {
         cy.get('@response').its('body.id').should('exist')
     })
 
-    it.only('Should get balance', () => {        
+    it('Should get balance', () => {        
        cy.request({
            url: '/saldo',
            method: 'GET',
@@ -155,7 +155,24 @@ describe('Work with alerts', () => {
         })
     })
 
-    it('Should remova a transaction', () => {
-       
+    it.only('Should remova a transaction', () => {
+        cy.request({
+            method: 'GET',
+            url: '/transacoes',            
+            headers:{
+             Authorization: `JWT ${token}` // Inserindo o token
+         },
+         qs: {
+            descricao: 'Movimentacao para exclusao'
+        }
+        }).then(res => {
+            cy.request({
+                url: `/transacoes/${res.body[0].id}`,
+                method: 'DELETE',
+                headers:{
+                    Authorization: `JWT ${token}` // Inserindo o token
+                },
+            }).its('status').should('be.equal', 204)
+        })
     })
 }) 
