@@ -191,7 +191,7 @@ describe('Work with alerts', () => {
         cy.xpath(loc.saldo.fn_xp_saldo_conta('Carteira')).should('contain','4.034,00')
     })
 
-    it.only('Should remova a transaction', () => {
+    it('Should remova a transaction', () => {
         cy.route({
             method: 'DELETE',
             url: '/transacoes/**',
@@ -203,4 +203,58 @@ describe('Work with alerts', () => {
         cy.xpath(loc.extrato.fn_xp_remove_elemento('Movimentacao para exclusao')).click()
         cy.get(loc.message).should('contain','sucesso')        
     })
+
+    it.only('Should validate data send to create an account', ()=> {
+        const reqStub = cy.stub()
+        cy.route({
+            method: 'POST',
+            url: '/contas',
+            response: {
+                id: 3,
+                nome: 'Conta de Teste',
+                visivel: true,
+                usuario_id: 1
+            },
+            // onRequest: req => {
+            //     console.log(req)
+            //     expect(req.request.body.nome).to.be.empty
+            //     expect(req.request.headers).to.have.property('Authorization')
+            // }
+            onRequest: reqStub
+        }).as('SaveConta')
+    
+        cy.acessarMenuConta()
+    
+        cy.route({
+            method: 'GET',
+            url: '/contas',
+            response: [{
+                id: 1,
+                nome: 'Carteira',
+                visivel: true,
+                usuario_id: 1
+            },{
+                id: 2,
+                nome: 'Banco',
+                visivel: true,
+                usuario_id: 1
+            },
+            {
+                id: 3,
+                nome: 'Conta de Teste',
+                visivel: true,
+                usuario_id: 1
+            }]
+        }).as('ContasSave')
+    
+        cy.inserirConta('{CONTROL}')
+        // cy.wait('@ContasSave').its('request.body.nome').should('not.be.empty')
+        cy.wait('@ContasSave').then(() => {
+            console.log(reqStub.args[0][0])
+            expect(reqStub.args[0][0].request.body.nome).to.be.empty
+            expect(reqStub.args[0][0].request.headers).to.have.property('Authorization')
+        })
+        cy.get(loc.message).should('contain','Conta inserida com sucesso!')
+    })
 }) 
+
