@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('Dinamics Tests', () => {   
+describe('Work with time', () => {   
     beforeEach(() => {
         cy.visit('https://wcaquino.me/cypress/componentes.html') // Hooks
     })
