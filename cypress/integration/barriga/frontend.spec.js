@@ -93,7 +93,7 @@ describe('Work with alerts', () => {
         cy.get(loc.message).should('contain','code 400')
     })
 
-    it.only('Should create a transaction', () => {
+    it('Should create a transaction', () => {
         cy.route({
             method: 'POST',
             url: '/transacoes',
@@ -120,7 +120,7 @@ describe('Work with alerts', () => {
         cy.xpath(loc.extrato.fn_xp_busca_elemento('New','250')).should('exist')
     })
 
-    it.only('Should get balance', () => {        
+    it('Should get balance', () => {        
         cy.route({
             method: 'GET',
             url: '/transacoes/**',
@@ -191,7 +191,14 @@ describe('Work with alerts', () => {
         cy.xpath(loc.saldo.fn_xp_saldo_conta('Carteira')).should('contain','4.034,00')
     })
 
-    it('Should remova a transaction', () => {
+    it.only('Should remova a transaction', () => {
+        cy.route({
+            method: 'DELETE',
+            url: '/transacoes/**',
+            response: {},
+            status: 204
+        }).as('Delete')
+
         cy.get(loc.menu.extrato).click({force: true})
         cy.xpath(loc.extrato.fn_xp_remove_elemento('Movimentacao para exclusao')).click()
         cy.get(loc.message).should('contain','sucesso')        
