@@ -204,7 +204,7 @@ describe('Work with alerts', () => {
         cy.get(loc.message).should('contain','sucesso')        
     })
 
-    it.only('Should validate data send to create an account', ()=> {
+    it('Should validate data send to create an account', ()=> {
         const reqStub = cy.stub()
         cy.route({
             method: 'POST',
@@ -255,6 +255,25 @@ describe('Work with alerts', () => {
             expect(reqStub.args[0][0].request.headers).to.have.property('Authorization')
         })
         cy.get(loc.message).should('contain','Conta inserida com sucesso!')
+    })
+
+    it.only('Should test colors', () =>{
+        cy.route({
+            method: 'GET',
+            url: '/extrato/**',
+            response: [
+                {"conta":"Conta para movimentacoes","id":151246,"descricao":"Receita paga","envolvido":"AAA","observacao":null,"tipo":"REC","data_transacao":"2020-05-31T03:00:00.000Z","data_pagamento":"2020-05-31T03:00:00.000Z","valor":"-1500.00","status":true,"conta_id":171918,"usuario_id":9956,"transferencia_id":null,"parcelamento_id":null},
+                {"conta":"Conta com movimentacao","id":151247,"descricao":"Receita pendente","envolvido":"BBB","observacao":null,"tipo":"REC","data_transacao":"2020-05-31T03:00:00.000Z","data_pagamento":"2020-05-31T03:00:00.000Z","valor":"-1500.00","status":false,"conta_id":171919,"usuario_id":9956,"transferencia_id":null,"parcelamento_id":null},
+                {"conta":"Conta para saldo","id":151248,"descricao":"Despesa paga","envolvido":"CCC","observacao":null,"tipo":"DESP","data_transacao":"2020-05-31T03:00:00.000Z","data_pagamento":"2020-05-31T03:00:00.000Z","valor":"3500.00","status":true,"conta_id":171920,"usuario_id":9956,"transferencia_id":null,"parcelamento_id":null},
+                {"conta":"Conta para saldo","id":151249,"descricao":"Despesa pendente","envolvido":"DDD","observacao":null,"tipo":"DESP","data_transacao":"2020-05-31T03:00:00.000Z","data_pagamento":"2020-05-31T03:00:00.000Z","valor":"-1000.00","status":false,"conta_id":171920,"usuario_id":9956,"transferencia_id":null,"parcelamento_id":null},
+               ]
+        })
+
+        cy.get(loc.menu.extrato).click()
+        cy.xpath(loc.extrato.fn_xp_linha('Receita paga')).should('have.class','receitaPaga')
+        cy.xpath(loc.extrato.fn_xp_linha('Receita pendente')).should('have.class','receitaPendente')
+        cy.xpath(loc.extrato.fn_xp_linha('Despesa paga')).should('have.class','despesaPaga')
+        cy.xpath(loc.extrato.fn_xp_linha('Despesa pendente')).should('have.class','despesaPendente')
     })
 }) 
 
