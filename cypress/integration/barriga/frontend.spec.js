@@ -95,11 +95,36 @@ describe('Work with alerts', () => {
         cy.get(loc.message).should('contain','Conta inserida com sucesso!')
     })
 
-    it('Should update an account', () => {
-        // cy.get(':nth-child(1) > :nth-child(2) > .fa-edit')
+    it.only('Should update an account', () => {
+        cy.route({
+            method: 'GET',
+            url: '/contas',
+            response: [{
+                id: 1,
+                nome: 'Carteira',
+                visivel: true,
+                usuario_id: 1
+            },{
+                id: 2,
+                nome: 'Banco',
+                visivel: true,
+                usuario_id: 1
+            }]
+        }).as('Contas')
+       
+        cy.route({
+            method: 'PUT',
+            url: '/contas/**',
+            response: {
+                id: 1,
+                nome: 'Conta alterada',
+                visivel: true,
+                usuario_id: 1
+            },
+        })
         cy.acessarMenuConta()
 
-        cy.xpath(loc.conta.fn_xp_btn_alterar('Conta para alterar')).click()
+        cy.xpath(loc.conta.fn_xp_btn_alterar('Banco')).click()
         cy.get(loc.conta.nome)
             .clear()
             .type('Conta alterada')
