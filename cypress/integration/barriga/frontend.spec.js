@@ -15,6 +15,20 @@ describe('Work with alerts', () => {
         cy.get(loc.menu.home).click()
     })
 
+    it('Should teste the responsiveness', () => {
+        cy.get('[data-test=menu-home]').should('exist')
+            .and('be.visible')
+        cy.viewport(550, 750)
+        cy.get('[data-test=menu-home]').should('exist')
+        .and('be.not.visible')
+        cy.viewport("iphone-5")
+        cy.get('[data-test=menu-home]').should('exist')
+        .and('be.not.visible')
+        cy.viewport("ipad-2")
+        cy.get('[data-test=menu-home]').should('exist')
+        .and('be.visible')
+    })
+
     it('Should create an account', ()=> {
         cy.route({
             method: 'POST',
@@ -257,7 +271,7 @@ describe('Work with alerts', () => {
         cy.get(loc.message).should('contain','Conta inserida com sucesso!')
     })
 
-    it.only('Should test colors', () =>{
+    it('Should test colors', () =>{
         cy.route({
             method: 'GET',
             url: '/extrato/**',
@@ -275,5 +289,8 @@ describe('Work with alerts', () => {
         cy.xpath(loc.extrato.fn_xp_linha('Despesa paga')).should('have.class','despesaPaga')
         cy.xpath(loc.extrato.fn_xp_linha('Despesa pendente')).should('have.class','despesaPendente')
     })
+
+    
+
 }) 
 
