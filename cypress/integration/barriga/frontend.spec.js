@@ -120,9 +120,50 @@ describe('Work with alerts', () => {
         cy.xpath(loc.extrato.fn_xp_busca_elemento('New','250')).should('exist')
     })
 
-    it('Should get balance', () => {        
+    it.only('Should get balance', () => {        
+        cy.route({
+            method: 'GET',
+            url: '/transacoes/**',
+            response:  {
+                "conta": "Conta para saldo",
+                "id": 151248,
+                "descricao": "Movimentacao 1, calculo saldo",
+                "envolvido": "CCC",
+                "observacao": null,
+                "tipo": "REC",
+                "data_transacao": "2020-05-31T03:00:00.000Z",
+                "data_pagamento": "2020-05-31T03:00:00.000Z",
+                "valor": "3500.00",
+                "status": false,
+                "conta_id": 171920,
+                "usuario_id": 9956,
+                "transferencia_id": null,
+                "parcelamento_id": null
+            }
+        })
+
+        cy.route({
+            method: 'PUT',
+            url: '/transacoes/**',
+            response:  {
+                "conta": "Conta para saldo",
+                "id": 151248,
+                "descricao": "Movimentacao 1, calculo saldo",
+                "envolvido": "CCC",
+                "observacao": null,
+                "tipo": "REC",
+                "data_transacao": "2020-05-31T03:00:00.000Z",
+                "data_pagamento": "2020-05-31T03:00:00.000Z",
+                "valor": "3500.00",
+                "status": false,
+                "conta_id": 171920,
+                "usuario_id": 9956,
+                "transferencia_id": null,
+                "parcelamento_id": null
+            }
+        })
         cy.get(loc.menu.home).click()
-        cy.xpath(loc.saldo.fn_xp_saldo_conta('Conta para saldo')).should('contain','534,00')
+        cy.xpath(loc.saldo.fn_xp_saldo_conta('Carteira')).should('contain','100,00')
 
         cy.get(loc.menu.extrato).click()
         cy.xpath(loc.extrato.fn_xp_alterar_elemento('Movimentacao 1, calculo saldo')).click()
@@ -132,8 +173,22 @@ describe('Work with alerts', () => {
         cy.get(loc.movimentacao.btn_salvar).click()
         cy.get(loc.message).should('contain','sucesso')
 
+        cy.route({
+            method: 'GET',
+            url: '/saldo',
+            response: [{
+                conta_id: 999,
+                conta:"Carteira",
+                saldo: "4034.00"                
+            },{
+                conta_id: 9909,
+                conta:"Banco",
+                saldo: "21000000.00"                
+            }]
+        }).as('SaldoFinal')
+
         cy.get(loc.menu.home).click()
-        cy.xpath(loc.saldo.fn_xp_saldo_conta('Conta para saldo')).should('contain','4.034,00')
+        cy.xpath(loc.saldo.fn_xp_saldo_conta('Carteira')).should('contain','4.034,00')
     })
 
     it('Should remova a transaction', () => {
