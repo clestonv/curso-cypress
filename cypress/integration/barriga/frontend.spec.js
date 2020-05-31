@@ -4,6 +4,9 @@ import loc from '../../support/locators'
 import '../../support/commands.conta'
 
 describe('Work with alerts', () => {
+    after(()=> {
+        cy.clearLocalStorage()
+    })
     before(() => {
         cy.server()
         cy.route({
@@ -42,7 +45,7 @@ describe('Work with alerts', () => {
         cy.resetApp()
     })
 
-    it('Should create an account', ()=> {
+    it.only('Should create an account', ()=> {
         cy.acessarMenuConta()
         cy.inserirConta('Conta de Teste')
         cy.get(loc.message).should('contain','Conta inserida com sucesso!')
