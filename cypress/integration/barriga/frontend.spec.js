@@ -31,22 +31,66 @@ describe('Work with alerts', () => {
                 saldo: "21000000.00"                
             }]
         }).as('Saldo')
-        cy.login('teste@cleston.com','senha errada')
-        
-        // cy.visit('https://barrigareact.wcaquino.me') // Hooks
-        // cy.get(loc.login.user).type('cleberson.osorioti@hotmail.com')
-        // cy.get(loc.login.password).type('T@bl3tenis')
-        // cy.get(loc.login.btn_login).click()
-        // cy.get(loc.message).should('contain','Bem vindo')
+        cy.login('teste@cleston.com','senha errada')        
+       
     })
 
     beforeEach(()=> {
         cy.get(loc.menu.home).click()
-        cy.resetApp()
+        // cy.resetApp()
     })
 
-    it.only('Should create an account', ()=> {
+    it('Should create an account', ()=> {
+        cy.route({
+            method: 'GET',
+            url: '/contas',
+            response: [{
+                id: 1,
+                nome: 'Carteira',
+                visivel: true,
+                usuario_id: 1
+            },{
+                id: 2,
+                nome: 'Banco',
+                visivel: true,
+                usuario_id: 1
+            }]
+        }).as('Contas')
+
+        cy.route({
+            method: 'POST',
+            url: '/contas',
+            response: {
+                id: 3,
+                nome: 'Conta de Teste',
+                visivel: true,
+                usuario_id: 1
+            }
+        }).as('SaveConta')
         cy.acessarMenuConta()
+
+        cy.route({
+            method: 'GET',
+            url: '/contas',
+            response: [{
+                id: 1,
+                nome: 'Carteira',
+                visivel: true,
+                usuario_id: 1
+            },{
+                id: 2,
+                nome: 'Banco',
+                visivel: true,
+                usuario_id: 1
+            },
+            {
+                id: 3,
+                nome: 'Conta de Teste',
+                visivel: true,
+                usuario_id: 1
+            }]
+        }).as('ContasSave')
+
         cy.inserirConta('Conta de Teste')
         cy.get(loc.message).should('contain','Conta inserida com sucesso!')
     })
