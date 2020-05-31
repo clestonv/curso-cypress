@@ -9,11 +9,10 @@ describe('Work with alerts', () => {
         cy.clearLocalStorage()
     })
  
-    beforeEach(()=> {
+    beforeEach(()=> {  
         buildEnv()
         cy.login('teste@cleston.com','senha errada')     
         cy.get(loc.menu.home).click()
-        
     })
 
     it('Should create an account', ()=> {
@@ -27,6 +26,7 @@ describe('Work with alerts', () => {
                 usuario_id: 1
             }
         }).as('SaveConta')
+
         cy.acessarMenuConta()
 
         cy.route({
@@ -76,10 +76,19 @@ describe('Work with alerts', () => {
         cy.get(loc.message).should('contain','Conta atualizada com sucesso!')
     })
 
-    it('Should not create an account with same name', () => {
+    it.only('Should not create an account with same name', () => {
+        cy.route({
+            method: 'POST',
+            url: '/contas',
+            response: {
+                "error":"Já existe uma conta com esse nome!"              
+            },
+            status: 400
+        }).as('SaveContaMesmoNome')
+
         cy.acessarMenuConta()
 
-        cy.get(loc.conta.nome).type('Conta mesmo nome')
+        cy.get(loc.conta.nome).type('Carteira')
         cy.get(loc.conta.btn_salvar).click()
         cy.get(loc.message).should('contain','code 400')
     })
